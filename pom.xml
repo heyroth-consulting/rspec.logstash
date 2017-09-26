@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>net.heyroth</groupId>
+    <artifactId>logstash-test</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-compile</id>
+                            <phase>none</phase>
+                        </execution>
+                        <execution>
+                            <id>default-testCompile</id>
+                            <phase>none</phase>
+                            <configuration>
+                                <compilerArgs>
+                                    <arg>-Xlint:deprecation</arg>
+                                </compilerArgs>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-install</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-jar</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-resources</id>
+                            <phase>none</phase>
+                        </execution>
+
+                        <execution>
+                            <id>copy-resources</id>
+                            <!-- here the phase you need -->
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/test-classes/ruby</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>src/test/ruby</directory>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>default-test</id>
+                            <phase>none</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.22.1</version>
+                    <configuration>
+                        <images>
+                            <image>
+                                <name>rspec.logstash</name>
+                                <build>
+                                    <dockerFileDir>${project.basedir}/logstash</dockerFileDir>
+                                </build>
+                                <run>
+                                    <cmd>/logstash/bin/rspec /logstash/test/spec/02_filter_spec.rb --form html --out /logstash/test/output/rspec_report.html</cmd>
+                                    <log>
+                                        <enabled>true</enabled>
+                                        <prefix>RSPEC</prefix>
+                                        <date>DEFAULT</date>
+                                    </log>
+                                    <volumes>
+                                        <bind>
+                                            <volume>
+                                                ${project.build.directory}/test-classes/pipeline:/logstash/test/pipeline
+                                            </volume>
+                                            <volume>${project.build.directory}/test-classes/ruby:/logstash/test/spec
+                                            </volume>
+                                            <volume>${project.build.directory}/results:/logstash/test/output
+                                            </volume>
+                                        </bind>
+                                    </volumes>
+                                    <wait>
+                                        <log>Sending Logstash's logs to  which is now configured via log4j2.properties</log>
+                                        <!--log>Randomized with seed [0-9]{1,10}</log-->
+                                        <time>3600000</time>
+                                    </wait>
+                                </run>
+                            </image>
+                        </images>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>build image</id>
+                            <phase>install</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+
+                        <execution>
+                            <id>start image</id>
+                            <phase>pre-integration-test</phase>
+                            <goals>
+                                <goal>start</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
