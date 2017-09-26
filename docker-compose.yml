@@ -5,8 +5,8 @@ services:
   logstash:
     build: logstash/
     volumes:
-      - ./src/test/resources/pipeline:/logstash/pipeline
-      - ./src/test/ruby:/logstash/spec
+      - ./src/test/resources/pipeline:/logstash/test/pipeline
+      - ./src/test/ruby:/logstash/test/spec
     ports:
       - "5000:5000"
     environment:

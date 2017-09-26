@@ -3,7 +3,7 @@ require "logstash/devutils/rspec/spec_helper"
 
 # Load the configuration file
 @@configuration = String.new
-@@configuration << File.read("/logstash/pipeline/02_filter.conf")
+@@configuration << File.read("/logstash/test/pipeline/02_filter.conf")
 
 describe "Nginx filter" do
 
