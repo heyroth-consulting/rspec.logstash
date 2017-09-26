@@ -7,9 +7,9 @@ services:
     volumes:
       - ./src/test/resources/pipeline:/logstash/test/pipeline
       - ./src/test/ruby:/logstash/test/spec
+      - ./target/results:/logstash/test/output
     ports:
       - "5000:5000"
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     command: top -b
-
