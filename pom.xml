@@ -99,7 +99,9 @@
                                     <dockerFileDir>${project.basedir}/logstash</dockerFileDir>
                                 </build>
                                 <run>
-                                    <cmd>/logstash/bin/rspec /logstash/test/spec/02_filter_spec.rb --form html --out /logstash/test/output/rspec_report.html</cmd>
+                                    <cmd>/logstash/bin/rspec /logstash/test/spec/02_filter_spec.rb --form html --out
+                                        /logstash/test/output/rspec_report.html
+                                    </cmd>
                                     <log>
                                         <enabled>true</enabled>
                                         <prefix>RSPEC</prefix>
@@ -117,8 +119,9 @@
                                         </bind>
                                     </volumes>
                                     <wait>
-                                        <log>Sending Logstash's logs to  which is now configured via log4j2.properties</log>
-                                        <!--log>Randomized with seed [0-9]{1,10}</log-->
+                                        <log>(Sending Logstash's logs to which is now configured via
+                                            log4j2.properties)||(Randomized with seed [0-9]{1,10})
+                                        </log>
                                         <time>3600000</time>
                                     </wait>
                                 </run>
@@ -128,7 +131,7 @@
                     <executions>
                         <execution>
                             <id>build image</id>
-                            <phase>install</phase>
+                            <phase>package</phase>
                             <goals>
                                 <goal>build</goal>
                             </goals>
