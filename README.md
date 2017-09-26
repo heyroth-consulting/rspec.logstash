@@ -1,6 +1,6 @@
 # Docker LOGSTASH RSPEC Unit Test Environment
 
-## Usgae
+## Usage
 
 1. Start test environmenmt
     docker-compose up -d --build
