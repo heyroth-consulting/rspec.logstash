@@ -30,4 +30,4 @@ RUN bin/logstash-plugin install --development
 # COPY /test project_spec/test
 # COPY /suite_runner.rb project_spec
 
-# CMD ["top"]
+# CMD ["top -b"]

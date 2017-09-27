@@ -5,8 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.heyroth</groupId>
-    <artifactId>logstash-test</artifactId>
+    <artifactId>rspec.logstash</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <docker.verbose>true</docker.verbose>
+    </properties>
 
     <build>
         <pluginManagement>
